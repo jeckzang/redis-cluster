@@ -1,7 +1,8 @@
 # redis-cluster
 Build image:
-docker build -t jeckzang:redis-cluster .
+docker build -t redis-cluster .
 
 Run:
-docker run -i -t jeckzang:redis-cluster
+run-in-docker.sh
+
 
