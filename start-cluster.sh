@@ -6,17 +6,13 @@ TIMEOUT=2000
 NODES=6
 REPLICAS=1
 
-# You may want to put the above config parameters into config.sh in order to
-# override the defaults without modifying this script.
-
-if [ -a config.sh ]
-then
-    source "config.sh"
-fi
 
 # Computed vars
 ENDPORT=$((PORT+NODES))
 HOSTS=""
+IP=`ifconfig eth0|grep 'inet '|cut -d: -f2|awk '{ print $1}'`
+# change redis config bind ip
+grep -rl '# bind 127.0.0.1' ./ |xargs sed -i 's/# bind 127.0.0.1/bind $IP/g'
 while [ $((PORT < ENDPORT)) != "0" ]; do
     PORT=$((PORT+1))
     echo "Starting $PORT"
