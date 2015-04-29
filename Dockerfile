@@ -3,6 +3,7 @@ FROM centos:6.6
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r redis && useradd -r -g redis redis
+RUN yum update
 RUN yum install -y curl
 RUN yum install -y tar
 
@@ -11,7 +12,11 @@ RUN yum install -y epel-release
 
 # install ruby
 RUN yum install -y ruby
-RUN yum install -y gcc libc6-dev g++ make automake autoconf curl-devel openssl-devel zlib-devel httpd-devel apr-devel apr-util-devel sqlite-devel
+RUN yum install -y gcc libc6-dev g++ make 
+RUN yum install -y automake autoconf curl-devel 
+RUN yum install -y openssl-devel zlib-devel 
+RUN yum install -y httpd-devel apr-devel 
+RUN yum install -y apr-util-devel sqlite-devel
 RUN yum install -y ruby-rdoc ruby-devel
 RUN yum install -y rubygems
 RUN gem install redis
