@@ -12,7 +12,7 @@ ENDPORT=$((PORT+NODES))
 HOSTS=""
 IP=`ifconfig eth0|grep 'inet '|cut -d: -f2|awk '{ print $1}'`
 # change redis config bind ip
-grep -rl '# bind 127.0.0.1' ./ |xargs sed -i 's/# bind 127.0.0.1/bind $IP/g'
+cd /redis && grep -rl '# bind 127.0.0.1' ./|grep 700 |xargs sed -i "s/# bind 127.0.0.1/bind $IP 127.0.0.1/g"
 while [ $((PORT < ENDPORT)) != "0" ]; do
     PORT=$((PORT+1))
     echo "Starting $PORT"

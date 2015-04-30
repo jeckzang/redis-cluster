@@ -3,7 +3,7 @@ FROM centos:6.6
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r redis && useradd -r -g redis redis
-RUN yum update
+RUN yum update -y
 RUN yum install -y curl
 RUN yum install -y tar
 
@@ -25,10 +25,12 @@ RUN gem install redis
 RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-amd64" \
 && chmod +x /usr/local/bin/gosu
 
-ENV REDIS_VERSION 2.8.19
-ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-3.0.0.tar.gz
+ENV REDIS_VERSION 3.0.0
+ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz
 # for redis-sentinel see: http://redis.io/topics/sentinel
+RUN buildDeps='gcc libc6-dev make'; \
 set -x \
+&& yum install -y $buildDeps \
 && rm -rf /var/lib/apt/lists/* \
 && mkdir -p /usr/src/redis \
 && curl -sSL "$REDIS_DOWNLOAD_URL" -o redis.tar.gz \
@@ -36,6 +38,8 @@ set -x \
 && rm redis.tar.gz \
 && make -C /usr/src/redis \
 && make -C /usr/src/redis install \
+&& yum install -y $buildDeps
+
 RUN mkdir -p /redis/7000 && mkdir -p /redis/7001 && mkdir -p /redis/7002 && mkdir -p /redis/7003 && mkdir -p /redis/7004 && mkdir -p /redis/7005
 RUN mkdir -p /var/lib/redis && chown -R redis:redis /var/lib/redis
 
